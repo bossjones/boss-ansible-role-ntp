@@ -2,6 +2,11 @@
 ### ntpd:
 - block:
 
+  # tasks file for adriagalin.timezone
+  - name: install ntp if it is necessary
+    apt: name=ntp state=present
+    tags: [ common, timezone ]
+
   # # # SOURCE: https://github.com/yktsubo/nsxt-k8s-setup/blob/8a34199f5769f5b6cdc44329fb7e3302b7dd64bf/playbooks/prep_os.yml
   # # - name: Set ntp server
   # #   shell: sed -i 's/#NTP=/NTP="{{ ntp }}"/g' /etc/systemd/timesyncd.conf
