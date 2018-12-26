@@ -4,6 +4,6 @@ Host ntp-box1*
   UserKnownHostsFile /dev/null
   StrictHostKeyChecking no
   PasswordAuthentication no
-  IdentityFile /Users/malcolm/dev/bossjones/bossjones-playbook-suite/boss-ansible-role-tools/.vagrant/machines/ntp-box1/virtualbox/private_key
+  IdentityFile /Users/malcolm/dev/bossjones/bossjones-playbook-suite/boss-ansible-role-ntp/.vagrant/machines/ntp-box1/virtualbox/private_key
   IdentitiesOnly yes
   LogLevel FATAL
