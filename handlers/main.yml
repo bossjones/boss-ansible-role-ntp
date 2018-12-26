@@ -1,0 +1,7 @@
+---
+# handlers file for boss-ansible-role-ntpd
+
+- name: restart ntpd
+  service:
+    name: systemd-ntpd
+    state: restarted
