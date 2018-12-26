@@ -1,5 +1,5 @@
 ---
-# handlers file for boss-ansible-role-ntpd
+# handlers file for boss-ansible-role-ntp
 
 # - name: restart ntpd
 #   service:
