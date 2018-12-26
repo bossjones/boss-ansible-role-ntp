@@ -165,7 +165,7 @@ destroy:
 	@vagrant destroy -f
 
 run-ansible:
-	@ansible-playbook -i inventory.ini vagrant_playbook.yml -v
+	@ansible-playbook -i inventory.ini vagrant_playbook.yml -vvvv
 
 run-ansible-etckeeper:
 	@ansible-playbook -i inventory.ini vagrant_playbook.yml -v -f 10 --tags etckeeper
