@@ -68,3 +68,24 @@ dependencies:
       goss_create_dst_dir: True
 
   - role: ansible-motd
+
+  - role: ansible-timezone
+    vars:
+      timezone: 'America/New_York'
+      timezone_update_hardware_clock: False
+  - role: ansible-ntp
+    vars:
+      # defaults file for ansible-ntp
+      # Defines if host is ntp_master
+      # set ntp_master to true on specific group_vars/group
+      ntp_master: False
+
+      # Define your ntp_master_servers
+      ntp_master_servers:
+        - 0.ubuntu.pool.ntp.org
+        - 1.ubuntu.pool.ntp.org
+        - 2.ubuntu.pool.ntp.org
+        - 3.ubuntu.pool.ntp.org
+
+      # Defines your primary domain name (FQDN)
+      ntp_pri_domain_name: 'localdomain'
