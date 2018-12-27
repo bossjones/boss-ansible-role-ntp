@@ -15,3 +15,21 @@ ntp_master_servers:
   - 1.ubuntu.pool.ntp.org
   - 2.ubuntu.pool.ntp.org
   - 3.ubuntu.pool.ntp.org
+
+
+# defaults file for ansible-ntp
+# Defines if host is ntp_master
+
+# Defines whether a fallback server should be configured or not
+ntp_enable_fallback_server: false
+
+# Defines an ntp fallback to server use when ntp_enable_fallback_server is true
+ntp_fallback_server: ntp.ubuntu.com
+
+# Defines your primary domain name (FQDN)
+ntp_pri_domain_name: 'example.org'
+
+# Defines internal ntp servers for clients to poll
+# ntp_servers:
+#  - 'ntp1.{{ ntp_pri_domain_name }}'
+#  - 'ntp2.{{ ntp_pri_domain_name }}'

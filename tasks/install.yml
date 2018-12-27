@@ -11,6 +11,16 @@
     - ntpstat
     - ntpdate
 
+  - name: debian | configuring ntp
+    template:
+      src: "etc/ntp.conf.j2"
+      dest: "/etc/ntp.conf"
+      owner: "root"
+      group: "root"
+      mode: "u=rw,g=r,o=r"
+    notify: restart ntp
+    become: true
+
   # # # SOURCE: https://github.com/yktsubo/nsxt-k8s-setup/blob/8a34199f5769f5b6cdc44329fb7e3302b7dd64bf/playbooks/prep_os.yml
   # # - name: Set ntp server
   # #   shell: sed -i 's/#NTP=/NTP="{{ ntp }}"/g' /etc/systemd/timesyncd.conf
