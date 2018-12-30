@@ -1,9 +1,4 @@
 ---
-boss__ntp__timezone: 'America/New_York'
-
-
-timezone: 'America/New_York'
-timezone_update_hardware_clock: False
 # defaults file for ansible-ntp
 # Defines if host is ntp_master
 # set ntp_master to true on specific group_vars/group
@@ -33,3 +28,41 @@ ntp_pri_domain_name: 'example.org'
 # ntp_servers:
 #  - 'ntp1.{{ ntp_pri_domain_name }}'
 #  - 'ntp2.{{ ntp_pri_domain_name }}'
+
+
+
+
+# NOTE: In preperation for new configs
+# -------------------------------------------
+
+boss__ntp__timezone: 'America/New_York'
+boss__ntp__timezone_update_hardware_clock: False
+# defaults file for ansible-ntp
+# Defines if host is ntp_master
+# set ntp_master to true on specific group_vars/group
+boss__ntp__ntp_master: False
+
+# Define your boss__ntp__ntp_master_servers
+boss__ntp__ntp_master_servers:
+  - 0.ubuntu.pool.ntp.org
+  - 1.ubuntu.pool.ntp.org
+  - 2.ubuntu.pool.ntp.org
+  - 3.ubuntu.pool.ntp.org
+
+
+# defaults file for ansible-ntp
+# Defines if host is boss__ntp__ntp_master
+
+# Defines whether a fallback server should be configured or not
+boss__ntp__ntp_enable_fallback_server: false
+
+# Defines an ntp fallback to server use when boss__ntp__ntp_enable_fallback_server is true
+boss__ntp__ntp_fallback_server: ntp.ubuntu.com
+
+# Defines your primary domain name (FQDN)
+boss__ntp__ntp_pri_domain_name: 'example.org'
+
+# Defines internal ntp servers for clients to poll
+# boss__ntp__ntp_servers:
+#  - 'ntp1.{{ boss__ntp__ntp_pri_domain_name }}'
+#  - 'ntp2.{{ boss__ntp__ntp_pri_domain_name }}'

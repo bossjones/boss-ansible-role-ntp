@@ -162,10 +162,11 @@ reload:
 	@vagrant reload
 
 destroy:
+	@vagrant halt -f
 	@vagrant destroy -f
 
 run-ansible:
-	@ansible-playbook -i inventory.ini vagrant_playbook.yml -vvvv
+	@ansible-playbook -i inventory.ini vagrant_playbook.yml
 
 run-ansible-etckeeper:
 	@ansible-playbook -i inventory.ini vagrant_playbook.yml -v -f 10 --tags etckeeper

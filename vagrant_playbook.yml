@@ -3,24 +3,28 @@
 # SERVERS: Install and configure ntp
 ##############################################################################
 - hosts: servers
-  name: servers install etckeeper
+  name: servers install etckeeper,timeone,debug,ntp
   gather_facts: True
   become: yes
   become_method: sudo
   environment:
     DEBIAN_FRONTEND: noninteractive
-  tags:
-    - servers
-    - install
-    - servers_install
-    - etckeeper
-    - tools
   roles:
     - role: boss-ansible-role-etckeeper
+      tags:
+        - boss-ansible-role-etckeeper
+
+    - role: boss-ansible-role-timezone
+      timezone: 'America/New_York'
+      tags:
+        - boss-ansible-role-timezone
+
     - role: boss-ansible-role-debug
       boss__debug__debug_variables_file: '/tmp/ansible_variables'
       boss__debug__dump_dir: '/etc/ansible_dumps'
-      boss__debug__dump_type: 'unified' # seperate
+      boss__debug__dump_type: 'seperate' # seperate
+      tags:
+        - boss-ansible-role-debug
 
     - role: ../
       task: install
@@ -39,3 +43,5 @@
         - 1.ubuntu.pool.ntp.org
         - 2.ubuntu.pool.ntp.org
         - 3.ubuntu.pool.ntp.org
+      tags:
+        - boss-ansible-role-ntp

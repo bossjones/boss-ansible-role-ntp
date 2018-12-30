@@ -5,7 +5,6 @@
   # tasks file for adriagalin.timezone
   - name: install ntp if it is necessary
     apt: name="{{item}}" state=present
-    tags: [ common, timezone ]
     with_items:
     - ntp
     - ntpstat
@@ -18,7 +17,8 @@
       owner: "root"
       group: "root"
       mode: "u=rw,g=r,o=r"
-    notify: restart ntp
+    notify:
+    - restart ntp
     become: true
 
   # # # SOURCE: https://github.com/yktsubo/nsxt-k8s-setup/blob/8a34199f5769f5b6cdc44329fb7e3302b7dd64bf/playbooks/prep_os.yml
@@ -65,44 +65,51 @@
 #    notify: # Debian & RH diff service name...
 #    - Restart ntpd
 
-  # tasks file for adriagalin.timezone
-  - name: install tzdata if it is necessary
-    apt: name=tzdata state=present
-    tags: [ common, timezone ]
+  ##########################################################################
+  # DISABLED
+  ##########################################################################
+  # # tasks file for adriagalin.timezone
+  # - name: install tzdata if it is necessary
+  #   apt: name=tzdata state=present
+  #   tags: [ common, timezone ]
 
-  - name: "Check current timezone"
-    shell: cat /etc/timezone
-    register: current_timezone
-    changed_when: False
+  # - name: "Check current timezone"
+  #   shell: cat /etc/timezone
+  #   register: current_timezone
+  #   changed_when: False
 
-  - name: "Set timezone"
-    timezone:
-      name: "{{ boss__ntp__timezone }}"
+  # - name: "Set timezone"
+  #   timezone:
+  #     name: "{{ boss__ntp__timezone }}"
 
-  - name: Run timedatectl status
-    command: /usr/bin/timedatectl status
-    changed_when: False
-    check_mode: no
-    register: timedatectl_result
+  # - name: Run timedatectl status
+  #   command: /usr/bin/timedatectl status
+  #   changed_when: False
+  #   check_mode: no
+  #   register: timedatectl_result
 
-  - name: Run timedatectl set-ntp no AKA turn off systemd-timesyncd
-    command: /usr/bin/timedatectl set-ntp no
-    changed_when: False
-    check_mode: no
-    register: timedatectl_result
+  # - name: Run timedatectl set-ntp no AKA turn off systemd-timesyncd
+  #   command: /usr/bin/timedatectl set-ntp no
+  #   changed_when: False
+  #   check_mode: no
+  #   register: timedatectl_result
 
-  - name: Run timedatectl status
-    command: /usr/bin/timedatectl status
-    register: timedatectl_result
-    changed_when: 'timedatectl_result.stdout is search("Network time on: no")'
+  # - name: Run timedatectl status
+  #   command: /usr/bin/timedatectl status
+  #   register: timedatectl_result
+  #   changed_when: 'timedatectl_result.stdout is search("Network time on: no")'
 
-  # - name: Verify ntp
-  #   command: /usr/bin/timedatectl set-ntp true
-  #   when: "'Network time on: no' in timedatectl_result.stdout"
-  #   become: yes
+  # # - name: Verify ntp
+  # #   command: /usr/bin/timedatectl set-ntp true
+  # #   when: "'Network time on: no' in timedatectl_result.stdout"
+  # #   become: yes
 
-  - name: Keep systemd-timesyncd on - but without ntp support enabled
-    service: name=systemd-timesyncd state=started enabled=yes
+  # - name: Keep systemd-timesyncd on - but without ntp support enabled
+  #   service: name=systemd-timesyncd state=started enabled=yes
+
+  ##########################################################################
+  # DISABLED
+  ##########################################################################
 
   - name: Ensure ntp service is running
     service:
@@ -113,20 +120,28 @@
 
   - name: Query ntpq about its status
     shell: ntpq -p
+    changed_when: False
+    check_mode: no
     register: ntpq
 
   - name: ntpq -p result
     debug:
       msg: "{{ ntpq.stdout }}"
     when: ntpq is defined
+    changed_when: False
+    check_mode: no
 
   - name: Getting the current machine date/time
     shell: date
     register: date
+    changed_when: False
+    check_mode: no
 
   - name: Print current datetime
     debug:
       msg: "{{ inventory_hostname }}: {{ date.stdout }}"
+    changed_when: False
+    check_mode: no
 
 #########################
 #########################
@@ -210,3 +225,25 @@
 #   - name: Print current datetime
 #     debug:
 #       msg: "{{ inventory_hostname }}: {{ date.stdout }}"
+
+# In ansible playbooks, handlers (such as to restart a service) normally happen at the end of a run. If you need ansible to run a handler between two tasks, there is "flush_handlers".
+- name: flush handlers
+  meta: flush_handlers
+
+
+# TODO: verification:
+
+# root@ntp-box1:~# cat /etc/ntp.conf
+# driftfile /var/lib/ntp/ntp.drift
+# statistics loopstats peerstats clockstats
+# filegen loopstats file loopstats type day enable
+# filegen peerstats file peerstats type day enable
+# filegen clockstats file clockstats type day enable
+# server 0.ubuntu.pool.ntp.org
+# server 1.ubuntu.pool.ntp.org
+# server 2.ubuntu.pool.ntp.org
+# server 3.ubuntu.pool.ntp.org
+# restrict -4 default kod notrap nomodify nopeer noquery
+# restrict -6 default kod notrap nomodify nopeer noquery
+# restrict 127.0.0.1
+# restrict ::1
