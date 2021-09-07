@@ -111,6 +111,16 @@
   # DISABLED
   ##########################################################################
 
+  # https://askubuntu.com/questions/1314479/ntp-not-supported
+  - name: unmask systemd-timesyncd.service
+    shell: |
+      systemctl unmask systemd-timesyncd.service
+    changed_when: False
+    check_mode: no
+    register: systemd_timesyncd
+    when: ansible_os_family == "Debian"
+
+
   - name: Ensure ntp service is running
     service:
       name: ntp
